@@ -1,9 +1,10 @@
 package utilities;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -54,7 +55,12 @@ public class WebActions extends DriverInit {
 	}
 
 	public WebElement findObject(String xpath, String source, String replace) {
-		return driver.findElement(By.xpath(xpath.replace(source, replace)));
+		WebElement ele = null;
+		try {
+			ele = driver.findElement(By.xpath(xpath.replace(source, replace)));
+		} catch (Exception e) {
+		}
+		return ele;
 	}
 
 	public List<WebElement> findObjects(String xpath, String source, String replace) {
@@ -62,20 +68,31 @@ public class WebActions extends DriverInit {
 	}
 
 	public void waitForLoading() {
-		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//img[@class='loading-icon']")));
+		try {
+			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//img[@class='loading-icon']")));
+		} catch (Exception e) {
+			System.out.println("Loading Element not visible");
+		}
+	}
+	
+	public String getText(WebElement ele) {
+		return ele.getText().trim();
 	}
 
 	public void waitForLoading(By by) {
 		try {
 			wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Loading Element not visible");
 		}
 	}
 
 	public void waitForElementVisibility(WebElement element) {
-
-		wait.until(ExpectedConditions.visibilityOf(element));
+		try {
+			wait.until(ExpectedConditions.visibilityOf(element));
+		} catch (Exception e) {
+			System.out.println("Loading Element not visible");
+		}
 	}
 
 	public void delay(int i) {
@@ -84,6 +101,22 @@ public class WebActions extends DriverInit {
 			Thread.sleep(i);
 		} catch (Exception e) {
 		}
+	}
+
+	public String getTimeStamp() {
+		return LocalDateTime.now().toString().replace("-", "").replace(":", "").replace(".", "").replace("T", "")
+				.trim();
+	}
+
+	public boolean isElementDisplayed(WebElement ele) {
+		boolean status = false;
+		try {
+			if (ele.isDisplayed()) {
+				status = true;
+			}
+		} catch (Exception e) {
+		}
+		return status;
 	}
 
 	public void waitForElementToLoadInDOM(WebElement ele) {
@@ -97,6 +130,12 @@ public class WebActions extends DriverInit {
 		} catch (Exception e) {
 			System.out.println("Waiting for the Element Load Completely");
 		}
+	}
+
+	public void jsClick(WebElement ele, String fieldName) {
+		executor = (JavascriptExecutor) driver;
+		executor.executeScript("arguments[0].click();", ele);
+		System.out.println("Clicked on "+fieldName);
 	}
 
 }
