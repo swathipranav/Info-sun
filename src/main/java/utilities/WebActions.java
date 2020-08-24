@@ -2,8 +2,8 @@ package utilities;
 
 import java.util.List;
 
+
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -66,7 +66,11 @@ public class WebActions extends DriverInit {
 	}
 
 	public void waitForLoading(By by) {
-		wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
+		try {
+			wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void waitForElementVisibility(WebElement element) {

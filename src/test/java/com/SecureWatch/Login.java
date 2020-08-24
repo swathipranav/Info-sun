@@ -23,7 +23,7 @@ public class Login extends WebActions {
 	public void initBrowser() {
 		WebDriverManager.chromedriver().setup();
 		driver = new ChromeDriver();
-		wait = new WebDriverWait(driver, 120);
+		wait = new WebDriverWait(driver, 60);
 		driver.manage().window().maximize();
 		driver.get("https://infos2307.riskwatch.com/platform");
 		waitForLoading();
@@ -35,7 +35,7 @@ public class Login extends WebActions {
 		input(login.username, "swathik@info-sun.com", "User Name");
 		input(login.password, "Info-123", "Password");
 		click(login.submitBtn, "Login");
-		waitForLoading(By.xpath("//*[@class='ng-star-inserted']"));
+		waitForLoading(By.xpath("//*[@class='ng-star-inserted']"));//....1
 		waitForLoading();
 	}
 
@@ -46,7 +46,7 @@ public class Login extends WebActions {
 		
 		FacilityPage facility = PageFactory.initElements(driver, FacilityPage.class);
 		
-		waitForLoading(By.xpath("//div[starts-with(@class,'loading-position-text')]"));
+		waitForLoading(By.xpath("//div[starts-with(@class,'loading-position-text')]"));//using the same method passing different xpath
 		
 		delay(5);
 		
@@ -65,11 +65,23 @@ public class Login extends WebActions {
 
 		if (status) {
 			System.out.println("Region is available");
+			
 		} else {
 			System.out.println("Failed -- Region is not available in the facility list");
 		}
+		
+		waitForLoading(By.xpath("//*[@class='ng-star-inserted']")); 
+		click(facility.addRegionTab,"Add RegionTab");
+		input(facility.regionName,"Hyderabad Region","Region Name");
+		input(facility.description,"Describing trhe hyderabad region","Region Description");
+		click(facility.saveBtn,"AddRegionSaveButton");
+		System.out.println("Region is added");
+		
+		
 
 	}
+	
+	
 
 	@AfterMethod
 	public void verifyTestStatus(ITestResult result) {
