@@ -6,10 +6,47 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.BeforeClass;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+import pageObjects.FacilityPage;
+import pageObjects.LoginPage;
 
 public class WebActions extends DriverInit {
+
+	@BeforeClass(alwaysRun = true)
+	public void initBrowser() {
+		WebDriverManager.chromedriver().setup();
+		driver = new ChromeDriver();
+		loadPages();
+		wait = new WebDriverWait(driver, 60);
+		driver.manage().window().maximize();
+		driver.get("https://infos2307.riskwatch.com/platform");
+		waitForLoading();
+		login();
+	}
+
+	public void login() {
+		input(login.username, "swathik@info-sun.com", "User Name");
+		input(login.password, "Info-123", "Password");
+		click(login.submitBtn, "Login");
+		waitForLoading(By.xpath("//*[@class='ng-star-inserted']"));// ....1
+		waitForLoading();
+		waitForElementVisibility(login.tutorialframe);
+		delay(5);
+		driver.switchTo().frame(login.tutorialframe);
+		click(login.tutorialbtn, "Tutorial Button");
+		driver.switchTo().defaultContent();
+	}
+
+	public void loadPages() {
+		facility = new FacilityPage(driver);
+		login = new LoginPage(driver);
+	}
 
 	public void input(WebElement ele, String data, String fieldName) {
 		waitForElementVisibility(ele);
@@ -74,7 +111,7 @@ public class WebActions extends DriverInit {
 			System.out.println("Loading Element not visible");
 		}
 	}
-	
+
 	public String getText(WebElement ele) {
 		return ele.getText().trim();
 	}
@@ -118,20 +155,18 @@ public class WebActions extends DriverInit {
 		}
 		return status;
 	}
-	
+
 	public boolean isElementDisplayed(By ele) {
 		boolean status = false;
 		List<WebElement> elements = driver.findElements(ele);
 		try {
-			if (elements.size()>0) {
+			if (elements.size() > 0) {
 				status = true;
 			}
 		} catch (Exception e) {
 		}
 		return status;
 	}
-	
-	
 
 	public void waitForElementToLoadInDOM(WebElement ele) {
 		try {
@@ -149,7 +184,7 @@ public class WebActions extends DriverInit {
 	public void jsClick(WebElement ele, String fieldName) {
 		executor = (JavascriptExecutor) driver;
 		executor.executeScript("arguments[0].click();", ele);
-		System.out.println("Clicked on "+fieldName);
+		System.out.println("Clicked on " + fieldName);
 	}
 
 }
