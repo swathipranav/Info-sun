@@ -118,6 +118,20 @@ public class WebActions extends DriverInit {
 		}
 		return status;
 	}
+	
+	public boolean isElementDisplayed(By ele) {
+		boolean status = false;
+		List<WebElement> elements = driver.findElements(ele);
+		try {
+			if (elements.size()>0) {
+				status = true;
+			}
+		} catch (Exception e) {
+		}
+		return status;
+	}
+	
+	
 
 	public void waitForElementToLoadInDOM(WebElement ele) {
 		try {

@@ -30,6 +30,8 @@ public class FacilityPage extends WebActions {
 
 	@FindBy(how = How.XPATH, using = "//span[contains(text(),'Save')]")
 	public WebElement saveBtn;
+	
+	public By savebtn1 = By.xpath("//span[contains(text(),'Save')]");
 
 	@FindBy(how = How.XPATH, using = " //button[@type='button']")
 	public WebElement CancelBtn;
@@ -39,9 +41,8 @@ public class FacilityPage extends WebActions {
 
 	@FindBy(how = How.XPATH, using = "//button[@mattooltip='Download data']/span/i")
 	public WebElement downloadIcon;
-
-	@FindBy(how = How.XPATH, using = "//mat-icon[contains(text(),'create')]")
-	public WebElement editIcon;
+	
+	public String regionEditIcon = "(//mat-icon[contains(text(),'create')])[$value]";// (//mat-table[@class='mat-table'])[1]/mat-row/mat-cell[4]//mat-icon
 
 	@FindBy(how = How.XPATH, using = "//mat-icon[contains(text(),'delete')]")
 	public WebElement deleteIcon;
