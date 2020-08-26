@@ -56,7 +56,7 @@ public class Login extends WebActions {
 			waitForLoading(By.xpath("//div[starts-with(@class,'loading-position-text')]"));// using the same method
 			delay(2);
 			// jsClick(findObject(facility.menuname, "${value}", "Facility"), "Facility");
-			GlobalVariables.WEBELEMENTS = driver.findElements(By.xpath("//ul[@id='main-menu-navigation']/li"));
+			GlobalVariables.WEBELEMENTS = facility.mainMenuNavigation;
 			for (int i = 1; i <= GlobalVariables.WEBELEMENTS.size(); i++) {
 				GlobalVariables.WEBELEMENT = driver
 						.findElement(By.xpath("//ul[@id='main-menu-navigation']/li[" + i + "]"));
@@ -96,13 +96,11 @@ public class Login extends WebActions {
 
 	@Test(priority = 2, dependsOnMethods = "addRegionForFacility")
 	public void verifyAddedRegion() {
-		jsClick(driver.findElement(By.xpath(
-				"(//div[@class='mat-paginator-page-size-label']/following::div[@class='mat-select-arrow-wrapper'])[1]")),
-				"Drop down");
-		click(driver.findElement(By.xpath("//mat-option[starts-with(@class,'mat-option')][last()]/span")),
-				"Max Records");
-		List<WebElement> Completetablecontent = driver
-				.findElements(By.xpath("(//mat-table[@class='mat-table'])[1]/mat-row/mat-cell[2]/span[1]"));
+		FacilityPage facility = PageFactory.initElements(driver, FacilityPage.class);
+		jsClick(facility.dataTableDropDownicon, "Drop Down Icon");
+
+		click(facility.maxRecordsInDropdown, "Max Records");
+		List<WebElement> Completetablecontent = facility.RegionDatatableContent;
 		for (int i = 1; i <= Completetablecontent.size(); i++) {
 			WebElement tabledata = driver.findElement(
 					By.xpath("(//mat-table[@class='mat-table'])[1]/mat-row[" + i + "]/mat-cell[2]/span[1]"));
@@ -120,7 +118,6 @@ public class Login extends WebActions {
 		GlobalVariables.WEBELEMENT = findObject("//span[contains(text(),'${value}')]/following::mat-icon[1]",
 				"${value}", GlobalVariables.addedRegion);
 		click(GlobalVariables.WEBELEMENT, "Edit Icon");
-		System.out.println("Edit region page is opened");
 		if (isElementDisplayed(obj.savebtn1)) {
 			System.out.println("Redirected to Edit Page");
 		} else
@@ -129,6 +126,55 @@ public class Login extends WebActions {
 		click(obj.saveBtn, "Region SaveBtn");
 		System.out.println("Region description is updated");
 	}
+
+	@Test(priority = 4, dependsOnMethods = "toEditRegionDetails")
+	public void toDeleteaddedRegion() {
+		FacilityPage obj = PageFactory.initElements(driver, FacilityPage.class);
+		jsClick(obj.dataTableDropDownicon, "Drop Down Icon");
+		click(obj.maxRecordsInDropdown, "Max Records");
+		GlobalVariables.WEBELEMENT = findObject("//span[contains(text(),'${value}')]/following::mat-icon[2]",
+				"${value}", GlobalVariables.addedRegion);
+		click(GlobalVariables.WEBELEMENT, "Delete Icon");
+
+		if (isElementDisplayed(obj.deleteYesBtn)) {
+
+			System.out.println("Delete icon is clicked");
+		} else {
+			Assert.fail("Delete icon is not clicked");
+		}
+
+		click(driver.findElement(By.xpath("//span[contains(text(),'Yes')]")), "YesBtn");
+
+	}
+
+	@Test(priority = 5)
+	public void toDeleteAllHyderabadRegionRecords() {
+		FacilityPage obj = PageFactory.initElements(driver, FacilityPage.class);
+		jsClick(obj.dataTableDropDownicon, "Drop Down Icon");
+		click(obj.maxRecordsInDropdown, "Max Records");
+
+		GlobalVariables.WEBELEMENTS = findObjects("//span[contains(text(),'${value}')]/following::mat-icon[2]",
+				"${value}", "Hyderabad");
+		for(WebElement ele:GlobalVariables.WEBELEMENTS) {
+			
+			click(ele,"Delete icon");
+			if (isElementDisplayed(obj.deleteYesBtn)) {
+
+				System.out.println("Delete icon is clicked");
+			} else {
+				Assert.fail("Delete icon is not clicked");
+			}
+
+			click(driver.findElement(By.xpath("//span[contains(text(),'Yes')]")), "YesBtn");
+			delay(2);
+			break;
+
+		}
+			
+		}
+		
+
+	
 
 	@AfterMethod
 	public void verifyTestStatus(ITestResult result) {

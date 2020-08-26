@@ -21,7 +21,7 @@ public class LoginPage {
 
 	@FindBy(how = How.XPATH, using = "(//iframe)[last()]")
 	public WebElement tutorialframe;
-	
+
 	@FindBy(how = How.XPATH, using = "//div[contains(text(),'Tutorials')]")
 	public WebElement tutorialbtn;
 

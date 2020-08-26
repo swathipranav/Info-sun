@@ -1,5 +1,7 @@
 package pageObjects;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -32,9 +34,23 @@ public class FacilityPage extends WebActions {
 	public WebElement saveBtn;
 	
 	public By savebtn1 = By.xpath("//span[contains(text(),'Save')]");
+	
+	public By deleteYesBtn = By.xpath("//span[contains(text(),'Yes')]");
 
 	@FindBy(how = How.XPATH, using = " //button[@type='button']")
 	public WebElement CancelBtn;
+	
+	@FindBy(how = How.XPATH, using = "//ul[@id='main-menu-navigation']/li")
+	public List<WebElement> mainMenuNavigation;
+	
+	@FindBy(how = How.XPATH, using = "(//mat-table[@class='mat-table'])[1]/mat-row/mat-cell[2]/span[1]")
+	public List<WebElement> RegionDatatableContent;
+	
+	@FindBy(how=How.XPATH,using="(//div[@class='mat-paginator-page-size-label']/following::div[@class='mat-select-arrow-wrapper'])[1]")
+	public WebElement dataTableDropDownicon;
+	
+	@FindBy(how=How.XPATH,using="//mat-option[starts-with(@class,'mat-option')][last()]/span")
+	public WebElement maxRecordsInDropdown;
 
 	@FindBy(how = How.XPATH, using = "//button[contains(text(),'Filter')]")
 	public WebElement filterBtn;
