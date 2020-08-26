@@ -18,6 +18,9 @@ public class LoginPage {
 
 	@FindBy(how = How.XPATH, using = "//img[@class='loading-icon']")
 	public WebElement loadicon;
+	
+	@FindBy(how = How.XPATH, using = "//*[@class='ng-star-inserted']")
+	public WebElement loadicon1;
 
 	@FindBy(how = How.XPATH, using = "(//iframe)[last()]")
 	public WebElement tutorialframe;
