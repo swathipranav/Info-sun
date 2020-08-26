@@ -24,6 +24,7 @@ public class WebActions extends DriverInit {
 		driver = new ChromeDriver();
 		loadPages();
 		wait = new WebDriverWait(driver, 60);
+		executor = ((JavascriptExecutor) driver);
 		driver.manage().window().maximize();
 		driver.get("https://infos2307.riskwatch.com/platform");
 		waitForLoading();
@@ -41,6 +42,10 @@ public class WebActions extends DriverInit {
 		driver.switchTo().frame(login.tutorialframe);
 		click(login.tutorialbtn, "Tutorial Button");
 		driver.switchTo().defaultContent();
+	}
+
+	public void scrollIntoElement(WebElement ele) {
+		executor.executeScript("arguments[0].scrollIntoView(true);", ele);
 	}
 
 	public void loadPages() {
@@ -68,6 +73,20 @@ public class WebActions extends DriverInit {
 		try {
 			if (ele.isDisplayed()) {
 				ele.click();
+				System.out.println("Clicked On " + fieldName);
+			} else {
+				System.out.println(fieldName + " is not displayed");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void click(By ele, String fieldName) {
+		waitForElementVisibility(ele);
+		try {
+			if (driver.findElement(ele).isDisplayed()) {
+				driver.findElement(ele).click();
 				System.out.println("Clicked On " + fieldName);
 			} else {
 				System.out.println(fieldName + " is not displayed");
@@ -132,6 +151,14 @@ public class WebActions extends DriverInit {
 		}
 	}
 
+	public void waitForElementVisibility(By element) {
+		try {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(element));
+		} catch (Exception e) {
+			System.out.println("Loading Element not visible");
+		}
+	}
+
 	public void delay(int i) {
 		try {
 			i = i * 1000;
@@ -182,7 +209,6 @@ public class WebActions extends DriverInit {
 	}
 
 	public void jsClick(WebElement ele, String fieldName) {
-		executor = (JavascriptExecutor) driver;
 		executor.executeScript("arguments[0].click();", ele);
 		System.out.println("Clicked on " + fieldName);
 	}

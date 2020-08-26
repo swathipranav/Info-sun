@@ -21,7 +21,7 @@ import pageObjects.LoginPage;
 import utilities.GlobalVariables;
 import utilities.WebActions;
 
-public class Login extends WebActions {
+public class AddRegionFuntionality extends WebActions {
 
 	@Test(priority = 1)
 	public void addRegionForFacility() {
@@ -29,7 +29,6 @@ public class Login extends WebActions {
 			boolean status = false;
 			waitForLoading(By.xpath("//div[starts-with(@class,'loading-position-text')]"));// using the same method
 			delay(2);
-			// jsClick(findObject(facility.menuname, "${value}", "Facility"), "Facility");
 			GlobalVariables.WEBELEMENTS = facility.mainMenuNavigation;
 			for (int i = 1; i <= GlobalVariables.WEBELEMENTS.size(); i++) {
 				GlobalVariables.WEBELEMENT = driver
@@ -42,6 +41,7 @@ public class Login extends WebActions {
 			List<WebElement> facilityNames = findObjects(facility.menulist, "${value}", "Facility");
 			for (WebElement ele : facilityNames) {
 				if (ele.getText().contains("Region")) {
+					delay(1);
 					ele.click();
 					status = true;
 					break;
@@ -70,9 +70,7 @@ public class Login extends WebActions {
 
 	@Test(priority = 2, dependsOnMethods = "addRegionForFacility")
 	public void verifyAddedRegion() {
-		FacilityPage facility = PageFactory.initElements(driver, FacilityPage.class);
 		jsClick(facility.dataTableDropDownicon, "Drop Down Icon");
-
 		click(facility.maxRecordsInDropdown, "Max Records");
 		List<WebElement> Completetablecontent = facility.RegionDatatableContent;
 		for (int i = 1; i <= Completetablecontent.size(); i++) {
@@ -93,68 +91,74 @@ public class Login extends WebActions {
 		click(GlobalVariables.WEBELEMENT, "Edit Icon");
 
 		System.out.println("Edit region page is opened");
-		if (isElementDisplayed(facility.savebtn1)) {
-			System.out.println("Redirected to Edit Page");
-		} else
-			Assert.fail("Redirected to edit page is failed");
+
+		Assert.assertTrue(isElementDisplayed(facility.savebtn1), "Redirected to edit page is failed");
+
 		input(facility.description, "description in edit region screen", "Region Description");
 		click(facility.saveBtn, "Region SaveBtn");
 		System.out.println("Region description is updated");
 	}
 
+	public String getPaginationNumber() {
+		waitForElementVisibility(facility.paginationnumber);
+		return getText(facility.paginationnumber).split("of")[1].trim();
+	}
+
 	@Test(priority = 4, dependsOnMethods = "toEditRegionDetails")
-	public void toDeleteaddedRegion() {
-		FacilityPage obj = PageFactory.initElements(driver, FacilityPage.class);
-		jsClick(obj.dataTableDropDownicon, "Drop Down Icon");
-		click(obj.maxRecordsInDropdown, "Max Records");
+	public void deleteaddedRegion() {
+		for (int i = 1; i <= 100; i++) {
+			if (!isElementDisplayed(facility.savebtn1)) {
+				break;
+			}
+		}
+		jsClick(facility.dataTableDropDownicon, "Drop Down Icon");
+		click(facility.maxRecordsInDropdown, "Max Records");
 		GlobalVariables.WEBELEMENT = findObject("//span[contains(text(),'${value}')]/following::mat-icon[2]",
 				"${value}", GlobalVariables.addedRegion);
 		click(GlobalVariables.WEBELEMENT, "Delete Icon");
-
-		if (isElementDisplayed(obj.deleteYesBtn)) {
-
-			System.out.println("Delete icon is clicked");
-		} else {
-			Assert.fail("Delete icon is not clicked");
+		GlobalVariables.paginationCount = Integer.parseInt(getPaginationNumber());
+		Assert.assertTrue(isElementDisplayed(facility.deleteYesBtn), "Delete Confirmation Pop up is not displayed");
+		click(facility.deleteYesBtn, "YesBtn");
+		int i = 1;
+		while (Integer.parseInt(getPaginationNumber()) == GlobalVariables.paginationCount) {
+			if (i == 50) {
+				break;
+			}
+			System.out.println("Iteration Count " + i);
+			i++;
 		}
-
-		click(driver.findElement(By.xpath("//span[contains(text(),'Yes')]")), "YesBtn");
-
+		if (Integer.parseInt(getPaginationNumber()) != GlobalVariables.paginationCount) {
+			System.out.println(GlobalVariables.addedRegion + " is deleted successfully");
+		} else {
+			Assert.fail(GlobalVariables.addedRegion + " is not deleted");
+		}
 	}
 
 	@Test(priority = 5)
-	public void toDeleteAllHyderabadRegionRecords() {
-		FacilityPage obj = PageFactory.initElements(driver, FacilityPage.class);
-		jsClick(obj.dataTableDropDownicon, "Drop Down Icon");
-		click(obj.maxRecordsInDropdown, "Max Records");
-
+	public void deleteAllHyderabadRegionRecords() {
+		// jsClick(facility.dataTableDropDownicon, "Drop Down Icon");
+		// click(facility.maxRecordsInDropdown, "Max Records");
 		GlobalVariables.WEBELEMENTS = findObjects("//span[contains(text(),'${value}')]/following::mat-icon[2]",
 				"${value}", "Hyderabad");
-		for(WebElement ele:GlobalVariables.WEBELEMENTS) {
-			
-			click(ele,"Delete icon");
-			if (isElementDisplayed(obj.deleteYesBtn)) {
-
+		for (WebElement ele : GlobalVariables.WEBELEMENTS) {
+			GlobalVariables.WEBELEMENT = driver
+					.findElement(By.xpath("(//span[contains(text(),'Hyderabad')]/following::mat-icon[2])[1]"));
+			scrollIntoElement(GlobalVariables.WEBELEMENT);
+			jsClick(GlobalVariables.WEBELEMENT, "Delete icon");
+			if (isElementDisplayed(facility.deleteYesBtn)) {
 				System.out.println("Delete icon is clicked");
 			} else {
 				Assert.fail("Delete icon is not clicked");
 			}
-
 			click(driver.findElement(By.xpath("//span[contains(text(),'Yes')]")), "YesBtn");
-			delay(2);
-			break;
-
+			delay(5);
 		}
-			
-		}
-		
-
-	
+	}
 
 	@AfterMethod
 	public void verifyTestStatus(ITestResult result) {
 		if (result.getStatus() == ITestResult.SUCCESS) {
-			System.out.println(result.getName()+ "------ Pass");
+			System.out.println(result.getName() + "------ Pass");
 		} else if (result.getStatus() == ITestResult.FAILURE) {
 			System.out.println("Fail");
 		} else if (result.getStatus() == ITestResult.SKIP) {

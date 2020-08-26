@@ -80,15 +80,9 @@ public class FacilityPage extends WebActions {
 
 	@FindBy(how = How.XPATH, using = "//button[text()='Add Facility Type']")
 	public WebElement addFacilityTypeBtn;
-
-
-
-	public WebElement findObject(String xpath, String source, String replace) {
-		return driver.findElement(By.xpath(xpath.replace(source, replace)));
-	}
-
-	public void test() {
-		findObject(menuname, "${value}", "Facility").click();
-	}
-
+	
+	@FindBy(how = How.XPATH, using = "(//div[@class='mat-paginator-range-label'])[1]")
+	public WebElement paginationnumber;
+	
+	
 }
