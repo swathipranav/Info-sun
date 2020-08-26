@@ -1,11 +1,20 @@
 package pageObjects;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.PageFactory;
 
-public class LoginPage {
+import utilities.DriverInit;
+import utilities.WebActions;
+
+public class LoginPage extends WebActions {
+
+	public LoginPage(WebDriver driver) {
+		DriverInit.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
 
 	@FindBy(how = How.XPATH, using = "//input[@formcontrolname='username']")
 	public WebElement username;
