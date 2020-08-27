@@ -9,72 +9,72 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.aventstack.extentreports.Status;
+
 import pageObjects.FacilityPage;
 import utilities.GlobalVariables;
 import utilities.WebActions;
 
 public class AddFacilityTypeFunctionality extends WebActions {
+	
 	@Test(priority = 1)
 	public void addFacilityType() {
-		//delay(5);
-		isElementDisplayed(By.xpath("//a[contains(text(),'Facility')]"));
-		try {
-			FacilityPage facility = PageFactory.initElements(driver, FacilityPage.class);
-			boolean status = false;
-			waitForLoading(By.xpath("//div[starts-with(@class,'loading-position-text')]"));// using the same method
-			delay(2);
-			GlobalVariables.WEBELEMENTS = driver.findElements(By.xpath("//ul[@id='main-menu-navigation']/li/a"));
-			for (int i = 1; i <= GlobalVariables.WEBELEMENTS.size(); i++) {
-
-				GlobalVariables.WEBELEMENT = driver
-						.findElement(By.xpath("//ul[@id='main-menu-navigation']/li[" + i + "]/a"));
-
-				if (GlobalVariables.WEBELEMENT.getText().contains("Facility")) {
-
-					click(GlobalVariables.WEBELEMENT, "Facility Tab");
-					break;
+		logger = report.createTest("Add Facility Type");
+		logger.assignAuthor(System.getProperty("user.name"));
+		if (isElementDisplayed(By.xpath("//a[contains(text(),'Facility')]"))) {
+			try {
+				boolean status = false;
+				waitForLoading(By.xpath("//div[starts-with(@class,'loading-position-text')]"));// using the same method
+				delay(2);
+				GlobalVariables.WEBELEMENTS = driver.findElements(By.xpath("//ul[@id='main-menu-navigation']/li/a"));
+				for (int i = 1; i <= GlobalVariables.WEBELEMENTS.size(); i++) {
+					GlobalVariables.WEBELEMENT = driver
+							.findElement(By.xpath("//ul[@id='main-menu-navigation']/li[" + i + "]/a"));
+					if (GlobalVariables.WEBELEMENT.getText().contains("Facility")) {
+						click(GlobalVariables.WEBELEMENT, "Facility Tab");
+						break;
+					}
 				}
-			}
-			GlobalVariables.WEBELEMENTS = driver.findElements(By.xpath("(//ul[@class='dropdown-menu show']/li)"));
-			for (int i = 1; i <= GlobalVariables.WEBELEMENTS.size(); i++) {
-
-				GlobalVariables.WEBELEMENT = driver
-						.findElement(By.xpath("(//ul[@class='dropdown-menu show']/li)[" + i + "]"));
-				if (GlobalVariables.WEBELEMENT.getText().contains("Facility Types")) {
-					click(GlobalVariables.WEBELEMENT, "Facility Types Tab");
-					status = true;
-					break;
+				GlobalVariables.WEBELEMENTS = driver.findElements(By.xpath("(//ul[@class='dropdown-menu show']/li)"));
+				for (int i = 1; i <= GlobalVariables.WEBELEMENTS.size(); i++) {
+					GlobalVariables.WEBELEMENT = driver
+							.findElement(By.xpath("(//ul[@class='dropdown-menu show']/li)[" + i + "]"));
+					if (GlobalVariables.WEBELEMENT.getText().contains("Facility Types")) {
+						click(GlobalVariables.WEBELEMENT, "Facility Types Tab");
+						status = true;
+						break;
+					}
 				}
+				if (status) {
+					System.out.println("Facility Types is vailable in the list");
+					logger.log(Status.INFO, "Facility Types is vailable in the list");
+				} else {
+					Assert.fail("Facility types is not available in the list");
+				}
+				click(facility.addFacilityTypeBtn, "Add facility type button");
+				GlobalVariables.addedFacility = "Test Facility" + getTimeStamp();
+				input(facility.facilityTypeName, GlobalVariables.addedFacility, "Facility Name");
+				//selectByVisibleText(facility.criticality, " 3 (Medium Low) ", "Criticality Drop Down");// Not selecting
+				//mat-option[starts-with(@id,'mat-option')]/span																					// the
+																										// criticality
+																										// value
+																										// from dropdown
+				input(facility.facilityTypeDescription, "Test description", "Facility Description");
+				click(facility.facilityTypeSaveBtn, "FacilityType SaveBtn");
+				delay(5);
+				if (isElementDisplayed(facility.facilityTypeSaveBtn)) {
+					System.out.println("FacilityType name already exists");
+				} else {
+					System.out.println("Facility type is added successfully");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-			if (status) {
-
-				System.out.println("Facility Types is vailable in the list");
-			} else {
-				Assert.fail("Facility types is not available in the list");
-			}
-			click(facility.addFacilityTypeBtn, "Add facility type button");
-			GlobalVariables.addedFacility = "Test Facility" + getTimeStamp();
-			input(facility.facilityTypeName, GlobalVariables.addedFacility, "Facility Name");
-			selectByVisibleText(facility.criticality, " 3 (Medium Low) ", "Criticality Drop Down");// Not selecting the
-																									// criticality value
-																									// from dropdown
-			input(facility.facilityTypeDescription, "Test description", "Facility Description");
-			click(facility.facilityTypeSaveBtn, "FacilityType SaveBtn");
-			delay(5);
-			if (facility.facilityTypeSaveBtn.isDisplayed()) {
-				System.out.println("FacilityType name already exists");
-			} else {
-				System.out.println("Facility type is added successfully");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
 	@Test(priority = 2)
 	public void verifyAddedFacilityType() {
-		FacilityPage facility = PageFactory.initElements(driver, FacilityPage.class);
 		jsClick(facility.dataTableDropDownicon, "Drop Down Icon");
 		click(facility.maxRecordsInDropdown, "Max Records");
 		GlobalVariables.WEBELEMENTS = driver
@@ -83,7 +83,6 @@ public class AddFacilityTypeFunctionality extends WebActions {
 			GlobalVariables.WEBELEMENT = driver.findElement(
 					By.xpath("(//mat-table[@class='mat-table'])[1]/mat-row[" + i + "]/mat-cell[2]/span[1]"));
 			if (GlobalVariables.WEBELEMENT.getText().equals(GlobalVariables.addedFacility)) {
-
 				System.out.println("Facility type is verified successfully in data table");
 				break;
 			}
@@ -104,12 +103,10 @@ public class AddFacilityTypeFunctionality extends WebActions {
 		input(facility.facilityTypeDescription, "updated facility type description", "Facility Description");
 		click(facility.facilityTypeSaveBtn, "Facility SaveBtn");
 		delay(5);
-		//click(facility.facilityTypeUpdateNo,"No button While Updating facility type");
-		//System.out.println("Facility type description is updated");
-		Robot robot = new Robot();
-		robot.keyPress(KeyEvent.VK_ENTER);
+		click(facility.facilityTypeUpdateNo,"No button While Updating facility type");
+		System.out.println("Facility type description is updated");
 	}
-	
+
 	public String getPaginationNumber() {
 		waitForElementVisibility(facility.paginationnumber);
 		return getText(facility.paginationnumber).split("of")[1].trim();
@@ -117,11 +114,7 @@ public class AddFacilityTypeFunctionality extends WebActions {
 
 	@Test(priority = 4)
 	public void toDeleteAddedFacilityType() {
-		for (int i = 1; i <= 100; i++) {
-			if (!isElementDisplayed(facility.savebtn1)) {
-				break;
-			}
-		}
+		genericUIFuntions.waitForInvisibilityOfSaveButton();
 		jsClick(facility.dataTableDropDownicon, "Drop Down Icon");
 		click(facility.maxRecordsInDropdown, "Max Records");
 		String xpath = "//span[contains(text(),'$value')]/following::mat-icon[2]";
@@ -133,7 +126,7 @@ public class AddFacilityTypeFunctionality extends WebActions {
 		} else {
 			System.out.println("Delete confirmation popup is displayed");
 		}
-		click(facility.deleteYesBtn,"YesBtn");
+		click(facility.deleteYesBtn, "YesBtn");
 		int i = 1;
 		while (Integer.parseInt(getPaginationNumber()) == GlobalVariables.paginationCount) {
 			if (i == 50) {

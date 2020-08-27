@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -23,6 +24,8 @@ public class WebActions extends DriverInit {
 		WebDriverManager.chromedriver().setup();
 		driver = new ChromeDriver();
 		loadPages();
+		// load GenericFunctions Methods
+		genericUIFuntions = new GenericUIFuntions();
 		wait = new WebDriverWait(driver, 60);
 		executor = ((JavascriptExecutor) driver);
 		driver.manage().window().maximize();
@@ -37,18 +40,19 @@ public class WebActions extends DriverInit {
 		click(login.submitBtn, "Login");
 		waitForLoading(By.xpath("//*[@class='ng-star-inserted']"));// ....1
 		waitForLoading();
-		//waitForElementVisibility(login.tutorialframe);
-		//delay(5);
-		//try {
-		//driver.switchTo().frame(login.tutorialframe);
-		//if(login.tutorialbtn.isDisplayed()) {
-		//click(login.tutorialbtn, "Tutorial Button");
-		//}
-		//driver.switchTo().defaultContent();
-		//}
-		//catch(Exception e) {
-		//	e.printStackTrace();
-		//}
+		if (isElementDisplayed(login.tutorialframe)) {
+			waitForElementVisibility(login.tutorialframe);
+			delay(5);
+			try {
+				driver.switchTo().frame(login.tutorialframe);
+				if (login.tutorialbtn.isDisplayed()) {
+					click(login.tutorialbtn, "Tutorial Button");
+				}
+				driver.switchTo().defaultContent();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void scrollIntoElement(WebElement ele) {
@@ -185,7 +189,9 @@ public class WebActions extends DriverInit {
 			if (ele.isDisplayed()) {
 				status = true;
 			}
-		} catch (Exception e) {
+		}catch (NoSuchElementException e) {
+		}
+		catch (Exception e) {
 		}
 		return status;
 	}

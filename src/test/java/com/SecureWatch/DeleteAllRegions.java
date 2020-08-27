@@ -4,11 +4,9 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import pageObjects.FacilityPage;
 import utilities.GlobalVariables;
 import utilities.WebActions;
 
@@ -17,7 +15,6 @@ public class DeleteAllRegions extends WebActions {
 	@Test()
 	public void toDeleteAllRegions() {
 		boolean status = false;
-		FacilityPage facility = PageFactory.initElements(driver, FacilityPage.class);
 		waitForLoading(By.xpath("//div[starts-with(@class,'loading-position-text')]"));// using the same method
 		delay(2);
 		/*

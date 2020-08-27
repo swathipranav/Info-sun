@@ -93,7 +93,7 @@ public class FacilityPage extends WebActions {
 	@FindBy(how=How.XPATH,using="//span[contains(text(),'Save')]")
 	public WebElement facilityTypeSaveBtn;
 	
-	@FindBy(how=How.XPATH,using="//span[contains(text(),'No')]")
+	@FindBy(how=How.XPATH,using="//span[text()='No']")
 	public WebElement facilityTypeUpdateNo;
 	
 	
