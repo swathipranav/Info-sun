@@ -2,22 +2,13 @@ package com.SecureWatch;
 
 import java.util.List;
 
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import io.github.bonigarcia.wdm.WebDriverManager;
-import pageObjects.FacilityPage;
-import pageObjects.LoginPage;
 import utilities.GlobalVariables;
 import utilities.WebActions;
 
@@ -134,27 +125,6 @@ public class AddRegionFuntionality extends WebActions {
 		}
 	}
 
-	@Test(priority = 5)
-	public void deleteAllHyderabadRegionRecords() {
-		// jsClick(facility.dataTableDropDownicon, "Drop Down Icon");
-		// click(facility.maxRecordsInDropdown, "Max Records");
-		GlobalVariables.WEBELEMENTS = findObjects("//span[contains(text(),'${value}')]/following::mat-icon[2]",
-				"${value}", "Hyderabad");
-		for (WebElement ele : GlobalVariables.WEBELEMENTS) {
-			GlobalVariables.WEBELEMENT = driver
-					.findElement(By.xpath("(//span[contains(text(),'Hyderabad')]/following::mat-icon[2])[1]"));
-			scrollIntoElement(GlobalVariables.WEBELEMENT);
-			jsClick(GlobalVariables.WEBELEMENT, "Delete icon");
-			if (isElementDisplayed(facility.deleteYesBtn)) {
-				System.out.println("Delete icon is clicked");
-			} else {
-				Assert.fail("Delete icon is not clicked");
-			}
-			click(driver.findElement(By.xpath("//span[contains(text(),'Yes')]")), "YesBtn");
-			delay(5);
-		}
-	}
-
 	@AfterMethod
 	public void verifyTestStatus(ITestResult result) {
 		if (result.getStatus() == ITestResult.SUCCESS) {
@@ -164,7 +134,7 @@ public class AddRegionFuntionality extends WebActions {
 		} else if (result.getStatus() == ITestResult.SKIP) {
 			System.out.println("Skipped");
 		}
-		// driver.close();
+		
 	}
 
 }

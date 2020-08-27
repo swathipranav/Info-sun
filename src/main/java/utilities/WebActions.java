@@ -37,11 +37,18 @@ public class WebActions extends DriverInit {
 		click(login.submitBtn, "Login");
 		waitForLoading(By.xpath("//*[@class='ng-star-inserted']"));// ....1
 		waitForLoading();
-		waitForElementVisibility(login.tutorialframe);
-		delay(5);
-		driver.switchTo().frame(login.tutorialframe);
-		click(login.tutorialbtn, "Tutorial Button");
-		driver.switchTo().defaultContent();
+		//waitForElementVisibility(login.tutorialframe);
+		//delay(5);
+		//try {
+		//driver.switchTo().frame(login.tutorialframe);
+		//if(login.tutorialbtn.isDisplayed()) {
+		//click(login.tutorialbtn, "Tutorial Button");
+		//}
+		//driver.switchTo().defaultContent();
+		//}
+		//catch(Exception e) {
+		//	e.printStackTrace();
+		//}
 	}
 
 	public void scrollIntoElement(WebElement ele) {

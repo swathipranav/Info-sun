@@ -10,5 +10,6 @@ public class GlobalVariables {
 	public static List<WebElement> WEBELEMENTS;
 	public static WebElement WEBELEMENT;
 	public static int paginationCount;
+	public static String addedFacility;
 
 }

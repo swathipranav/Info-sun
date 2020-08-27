@@ -81,6 +81,22 @@ public class FacilityPage extends WebActions {
 	@FindBy(how = How.XPATH, using = "//button[text()='Add Facility Type']")
 	public WebElement addFacilityTypeBtn;
 	
+	@FindBy(how=How.XPATH,using="//input[@placeholder='Facility Type *']")
+	public WebElement facilityTypeName;
+	
+	@FindBy(how=How.XPATH,using="(//div[@class='mat-select-value'])[2]")
+	public WebElement criticality;
+	
+	@FindBy(how=How.XPATH,using="//textarea[@placeholder='Description']")
+	public WebElement facilityTypeDescription;
+	
+	@FindBy(how=How.XPATH,using="//span[contains(text(),'Save')]")
+	public WebElement facilityTypeSaveBtn;
+	
+	@FindBy(how=How.XPATH,using="//span[contains(text(),'No')]")
+	public WebElement facilityTypeUpdateNo;
+	
+	
 	@FindBy(how = How.XPATH, using = "(//div[@class='mat-paginator-range-label'])[1]")
 	public WebElement paginationnumber;
 	
