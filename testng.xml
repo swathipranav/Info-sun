@@ -5,7 +5,7 @@
 		<classes>
 			<class name="com.SecureWatch.AddFacilityTypeFunctionality">
 				<methods>
-					<include name="addFacilityType" />
+					<include name="addRegionForFacility" />
 				</methods>
 			</class>
 		</classes>

@@ -1,17 +1,25 @@
 package utilities;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeClass;
+
+import com.aventstack.extentreports.MediaEntityBuilder;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import pageObjects.FacilityPage;
@@ -29,7 +37,7 @@ public class WebActions extends DriverInit {
 		wait = new WebDriverWait(driver, 60);
 		executor = ((JavascriptExecutor) driver);
 		driver.manage().window().maximize();
-		driver.get("https://infos2307.riskwatch.com/platform");
+		// driver.get("https://infos2307.riskwatch.com/platform");
 		waitForLoading();
 		login();
 	}
@@ -189,9 +197,8 @@ public class WebActions extends DriverInit {
 			if (ele.isDisplayed()) {
 				status = true;
 			}
-		}catch (NoSuchElementException e) {
-		}
-		catch (Exception e) {
+		} catch (NoSuchElementException e) {
+		} catch (Exception e) {
 		}
 		return status;
 	}
@@ -221,9 +228,31 @@ public class WebActions extends DriverInit {
 		}
 	}
 
+	public void takeScreenShot(String name) {
+		try {
+			// Press Prtsc in Keyboard
+			File screen = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+			GlobalVariables.destination = new File("E:\\BrowserDriver\\" + name + ".png");
+			FileHandler.copy(screen, GlobalVariables.destination);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void jsClick(WebElement ele, String fieldName) {
 		executor.executeScript("arguments[0].click();", ele);
 		System.out.println("Clicked on " + fieldName);
+	}
+
+	public void addScreenToReportWithINFO(String msg, String locatoin) {
+		try {
+			File screen = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+			GlobalVariables.destination = new File("E:\\BrowserDriver\\" + msg + ".png");
+			FileHandler.copy(screen, GlobalVariables.destination);
+			logger.info(msg, MediaEntityBuilder.createScreenCaptureFromPath(locatoin).build());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 	}
 
 }

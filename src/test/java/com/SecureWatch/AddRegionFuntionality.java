@@ -2,19 +2,33 @@ package com.SecureWatch;
 
 import java.util.List;
 
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
+
+import com.aventstack.extentreports.Status;
+
 import utilities.GlobalVariables;
 import utilities.WebActions;
 
 public class AddRegionFuntionality extends WebActions {
 
-	@Test(priority = 1)
+	
+	@Test
+	public void login() {
+		logger = report.createTest("AmazonHomePage");
+		driver.get("https://www.amazon.in/");
+		takeScreenShot("Amazon");
+		logger.log(Status.INFO, "User Navigated to Amazon Home Page");
+		//logger.info("Amazon").addScreenCaptureFromPath(GlobalVariables.destination.getAbsolutePath());
+		addScreenToReportWithINFO("Hello", GlobalVariables.destination.getAbsolutePath());
+	}
+	
+	
+	@Test(priority = 1,enabled = false)
 	public void addRegionForFacility() {
 		try {
 			boolean status = false;
@@ -25,6 +39,7 @@ public class AddRegionFuntionality extends WebActions {
 				GlobalVariables.WEBELEMENT = driver
 						.findElement(By.xpath("//ul[@id='main-menu-navigation']/li[" + i + "]"));
 				if (getText(GlobalVariables.WEBELEMENT).contains("Facility")) {
+					takeScreenShot("Facility");
 					click(GlobalVariables.WEBELEMENT, "Facility");
 					break;
 				}
@@ -59,7 +74,7 @@ public class AddRegionFuntionality extends WebActions {
 
 	}
 
-	@Test(priority = 2, dependsOnMethods = "addRegionForFacility")
+	@Test(priority = 2, dependsOnMethods = "addRegionForFacility",enabled = false)
 	public void verifyAddedRegion() {
 		jsClick(facility.dataTableDropDownicon, "Drop Down Icon");
 		click(facility.maxRecordsInDropdown, "Max Records");
@@ -75,7 +90,7 @@ public class AddRegionFuntionality extends WebActions {
 		}
 	}
 
-	@Test(priority = 3, dependsOnMethods = "verifyAddedRegion")
+	@Test(priority = 3, dependsOnMethods = "verifyAddedRegion",enabled = false)
 	public void toEditRegionDetails() {
 		GlobalVariables.WEBELEMENT = findObject("//span[contains(text(),'${value}')]/following::mat-icon[1]",
 				"${value}", GlobalVariables.addedRegion);
@@ -95,7 +110,7 @@ public class AddRegionFuntionality extends WebActions {
 		return getText(facility.paginationnumber).split("of")[1].trim();
 	}
 
-	@Test(priority = 4, dependsOnMethods = "toEditRegionDetails")
+	@Test(priority = 4, dependsOnMethods = "toEditRegionDetails",enabled = false)
 	public void deleteaddedRegion() {
 		for (int i = 1; i <= 100; i++) {
 			if (!isElementDisplayed(facility.savebtn1)) {
@@ -127,6 +142,7 @@ public class AddRegionFuntionality extends WebActions {
 
 	@AfterMethod
 	public void verifyTestStatus(ITestResult result) {
+		
 		if (result.getStatus() == ITestResult.SUCCESS) {
 			System.out.println(result.getName() + "------ Pass");
 		} else if (result.getStatus() == ITestResult.FAILURE) {
