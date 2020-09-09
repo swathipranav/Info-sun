@@ -100,5 +100,12 @@ public class FacilityPage extends WebActions {
 	@FindBy(how = How.XPATH, using = "(//div[@class='mat-paginator-range-label'])[1]")
 	public WebElement paginationnumber;
 	
+	@FindBy(how = How.XPATH, using = "//ul[@id='main-menu-navigation']/li/a")
+	public List<WebElement> facilitylist;
+	
+	public String expfacilityname = "//ul[@id='main-menu-navigation']/li[${value}]/a";
+	
+	
+	
 	
 }

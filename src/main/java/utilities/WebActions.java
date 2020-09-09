@@ -1,7 +1,6 @@
 package utilities;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.io.FileHandler;
@@ -22,6 +20,7 @@ import org.testng.annotations.BeforeClass;
 import com.aventstack.extentreports.MediaEntityBuilder;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import pageObjects.ContentManagerPage;
 import pageObjects.FacilityPage;
 import pageObjects.LoginPage;
 
@@ -34,10 +33,10 @@ public class WebActions extends DriverInit {
 		loadPages();
 		// load GenericFunctions Methods
 		genericUIFuntions = new GenericUIFuntions();
-		wait = new WebDriverWait(driver, 60);
+		wait = new WebDriverWait(driver, 30);
 		executor = ((JavascriptExecutor) driver);
 		driver.manage().window().maximize();
-		// driver.get("https://infos2307.riskwatch.com/platform");
+		driver.get("https://infos2307.riskwatch.com/platform");
 		waitForLoading();
 		login();
 	}
@@ -70,6 +69,8 @@ public class WebActions extends DriverInit {
 	public void loadPages() {
 		facility = new FacilityPage(driver);
 		login = new LoginPage(driver);
+		contentManagerPage = new ContentManagerPage(driver);
+
 	}
 
 	public void input(WebElement ele, String data, String fieldName) {
@@ -166,7 +167,6 @@ public class WebActions extends DriverInit {
 		try {
 			wait.until(ExpectedConditions.visibilityOf(element));
 		} catch (Exception e) {
-			System.out.println("Loading Element not visible");
 		}
 	}
 
@@ -252,7 +252,7 @@ public class WebActions extends DriverInit {
 			logger.info(msg, MediaEntityBuilder.createScreenCaptureFromPath(locatoin).build());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 	}
 
 }
