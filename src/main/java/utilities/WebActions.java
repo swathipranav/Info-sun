@@ -28,6 +28,7 @@ public class WebActions extends DriverInit {
 
 	@BeforeClass(alwaysRun = true)
 	public void initBrowser() {
+		loadTestData();
 		WebDriverManager.chromedriver().setup();
 		driver = new ChromeDriver();
 		loadPages();

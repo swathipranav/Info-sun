@@ -1,26 +1,25 @@
 package com.SecureWatch;
 
 import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.aventstack.extentreports.Status;
 
-import pageObjects.FacilityPage;
 import utilities.GlobalVariables;
 import utilities.WebActions;
 
 public class AddFacilityTypeFunctionality extends WebActions {
+
 	
+
 	@Test(priority = 1)
 	public void addFacilityType() {
 		logger = report.createTest("Add Facility Type");
 		logger.assignAuthor(System.getProperty("user.name"));
+		delay(5);
 		if (isElementDisplayed(By.xpath("//a[contains(text(),'Facility')]"))) {
 			try {
 				boolean status = false;
@@ -52,14 +51,15 @@ public class AddFacilityTypeFunctionality extends WebActions {
 					Assert.fail("Facility types is not available in the list");
 				}
 				click(facility.addFacilityTypeBtn, "Add facility type button");
-				GlobalVariables.addedFacility = "Test Facility" + getTimeStamp();
+				GlobalVariables.addedFacility = addFacilityType.get("Name") + getTimeStamp();
 				input(facility.facilityTypeName, GlobalVariables.addedFacility, "Facility Name");
-				//selectByVisibleText(facility.criticality, " 3 (Medium Low) ", "Criticality Drop Down");// Not selecting
-				//mat-option[starts-with(@id,'mat-option')]/span																					// the
-																										// criticality
-																										// value
-																										// from dropdown
-				input(facility.facilityTypeDescription, "Test description", "Facility Description");
+				// selectByVisibleText(facility.criticality, " 3 (Medium Low) ", "Criticality
+				// Drop Down");// Not selecting
+				// mat-option[starts-with(@id,'mat-option')]/span // the
+				// criticality
+				// value
+				// from dropdown
+				input(facility.facilityTypeDescription, addFacilityType.get("Description"), "Facility Description");
 				click(facility.facilityTypeSaveBtn, "FacilityType SaveBtn");
 				delay(5);
 				if (isElementDisplayed(facility.facilityTypeSaveBtn)) {
@@ -100,10 +100,10 @@ public class AddFacilityTypeFunctionality extends WebActions {
 			System.out.println("Not redirected to edit facility type page");
 		}
 
-		input(facility.facilityTypeDescription, "updated facility type description", "Facility Description");
+		input(facility.facilityTypeDescription, addFacilityType.get("EditFacilityDescription"), "Facility Description");
 		click(facility.facilityTypeSaveBtn, "Facility SaveBtn");
 		delay(5);
-		click(facility.facilityTypeUpdateNo,"No button While Updating facility type");
+		click(facility.facilityTypeUpdateNo, "No button While Updating facility type");
 		System.out.println("Facility type description is updated");
 	}
 
